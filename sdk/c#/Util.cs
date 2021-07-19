@@ -1,0 +1,9 @@
+﻿namespace Util
+{
+    class Util
+    {
+
+    }
+
+
+}

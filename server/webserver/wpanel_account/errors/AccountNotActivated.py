@@ -1,0 +1,2 @@
+class AccountNotActivated(Exception):
+    pass

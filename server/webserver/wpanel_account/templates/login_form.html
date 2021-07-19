@@ -1,0 +1,81 @@
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <!--  This file has been downloaded from bootdey.com    @bootdey on twitter -->
+      <!--  All snippets are MIT license http://bootdey.com/license -->
+      <title>WDashboard login</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link href="https://netdna.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="../static/css/style.css">
+       <link rel="stylesheet" href="../static/css/style.css">
+      <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+      <script src="../static/js/utils.js"></script>
+   </head>
+   <body>
+      <div class="container light-style flex-grow-1 container-p-y">
+         <h4 class="font-weight-bold py-3 mb-4" style="text-align: center">WPanel Dashboard</h4>
+         <form class="needs-validation" id="login-form" novalidate>
+            <div class="demos">
+               <div class="row g-3 card overflow-hidden">
+                  <div class="row no-gutters row-bordered row-border-light center">
+                     <div class="col-md-9 center">
+                        <div class="tab-content">
+                           <div class="tab-pane fade active show center" id="account-general">
+                              <hr class="border-light m-0">
+                              <div class="card-body">
+                                 <div class="form-group center">
+                                    <label class="form-label">Email</label>
+                                    <input class="form-control mb-1 center" type="email" id="username" required>
+                                    <div class="invalid-feedback">
+                                       Please provide a valid email.
+                                    </div>
+                                 </div>
+                                 <div class="form-group center">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" required>
+                                    <div class="invalid-feedback">
+                                       Please provide a valid password.
+                                    </div>
+                                     <div id="form-message" class="form-control-feedback" style="color: red"></div>
+                                     <br>
+                                     <a href="../forgot">Reset password</a>
+                                 </div>
+                              </div>
+                           </div>
+
+                           <noscript><a>You must have enable javascript</a></noscript>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="text-right mt-3 center">
+                  <button type="button" class="btn btn-primary center" id="submit">
+                  Login
+                  <i id="btn_spinner" class="fa"></i>
+                  </button>&nbsp;
+               </div>
+               <div class="demo-up" id="server-ok" style="display: none">
+                  <span class="server-status" type="up"></span>
+                  <span>Server is running without issues.</span>
+               </div>
+               <div class="demo-slow" id="server-issues" style="display: none">
+                  <span class="server-status" type="slow"></span>
+                  <span>Server is slow to respond, could be caused by some DDoS.</span>
+               </div>
+               <div class="demo-down" id="server-error" style="display: none">
+                  <span class="server-status" type="down"></span>
+                  <span>Server is not responding, down.</span>
+               </div>
+                <div class="demo-checking" id="server-checking" style="display: block">
+                  <span class="server-status" type="checking"></span>
+                  <span>Checking...</span>
+               </div>
+            </div>
+         </form>
+      </div>
+      <script src="../static/js/login.js"></script>
+      <script src="../static/js/server-status-api.js"></script>
+   <script async>checkServerStatus()</script>
+   </body>
+</html>
