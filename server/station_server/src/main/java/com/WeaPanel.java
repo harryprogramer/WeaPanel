@@ -1,14 +1,14 @@
 package com;
 
 import com.http.HttpApi;
-import com.scom.SComService;
+import com.scom.Server;
 import com.telemetry.EventLogger;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Properties;
 
 public class WeaPanel {
@@ -29,11 +29,10 @@ public class WeaPanel {
 
     public static void main(String[] args) throws InterruptedException {
         initLog();
-        EventLogger eventLogger = new EventLogger();
-        SComService sComService = new SComService();
+        Server server = new Server();
         HttpApi httpApi = new HttpApi();
-        SComService.addTelemetryTask(eventLogger);
-        App.registerService(sComService);
+        Server.addTelemetryTask(EventLogger.class);
+        App.registerService(server);
         App.registerService(httpApi);
         App.runApp();
     }

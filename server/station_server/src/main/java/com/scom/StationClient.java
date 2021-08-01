@@ -1,5 +1,6 @@
 package com.scom;
 
+import com.scom.protocol.PacketHandler;
 import com.telemetry.TelemetryStream;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
@@ -8,9 +9,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.channels.AsynchronousByteChannel;
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class StationClient extends ClientHandler{
@@ -18,34 +20,41 @@ public class StationClient extends ClientHandler{
     private final Socket client;
     private final PrintWriter out;
     private final BufferedReader in;
-    private final TelemetryStream[] telemetries;
+    private final ArrayList<TelemetryStream> telemetries = new ArrayList<>();
     protected int session_id = 0;
 
-    protected String ip;
-    protected String mac;
-    protected String dns;
-    protected String gateway;
-    protected String remote_ip;
-    protected String subnet_mask;
-    protected int remote_port;
-    protected String station_uuid;
-    protected String sys_version;
-    protected String sd_type;
-    protected String fat_type;
-    protected String volume_size;
-    protected String free_space;
-    protected String used_space;
-    protected int station_id;
+    private String ip;
+    private String mac;
+    private String dns;
+    private String gateway;
+    private String remote_ip;
+    private String subnet_mask;
+    private int remote_port;
+    private String station_uuid;
+    private String sys_version;
+    private String sd_type;
+    private String fat_type;
+    private String volume_size;
+    private String free_space;
+    private String used_space;
+    private int station_id;
 
 
-    protected StationClient(Socket socket, TelemetryStream[] telemetries) throws IOException {
+    protected StationClient(Socket socket, ArrayList<Class<? extends TelemetryStream>> telemetries) throws IOException {
         super(socket);
         this.client = socket;
         this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         this.out = new PrintWriter(socket.getOutputStream(), true);
-        this.telemetries = telemetries;
         logger.info("Connection from [" + socket.getInetAddress().toString() + "]");
         new Thread(this::performHandshake).start();
+        for(Class<? extends TelemetryStream> telemetry : telemetries){
+            try {
+                this.telemetries.add((TelemetryStream) Class.forName(telemetry.getName()).getDeclaredConstructor().newInstance());
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
     }
 
     private void performSession(){
@@ -71,10 +80,8 @@ public class StationClient extends ClientHandler{
                 return;
             }
             logger.info("Session started with id " + session_id + " uuid: " + getUUID());
-            if(telemetries != null) {
-                for (TelemetryStream telemetryStream : telemetries) {
-                    telemetryStream.initTelemetry(this);
-                }
+            for(TelemetryStream telemetryStream : telemetries){
+                telemetryStream.initTelemetry(this);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,7 +126,7 @@ public class StationClient extends ClientHandler{
     }
 
 
-    protected TelemetryStream[] getTelemetries(){
+    protected ArrayList<TelemetryStream> getTelemetries(){
         return telemetries;
     }
 
@@ -133,10 +140,10 @@ public class StationClient extends ClientHandler{
                 ioException.printStackTrace();
             }
         }
-        if(SComService.getStationConn() != null
-                && SComService.getStationConn().getUUID().
+        if(Server.getStationConn() != null
+                && Server.getStationConn().getUUID().
                 equalsIgnoreCase(getUUID())) {
-            SComService.disconnectActiveStation();
+            Server.disconnectActiveStation();
         }
     }
 
@@ -168,6 +175,40 @@ public class StationClient extends ClientHandler{
         return station_uuid;
     }
 
+    public String getIp() {
+        return ip;
+    }
 
+    public String getGateway() {
+        return gateway;
+    }
+
+    public int getRemote_port() {
+        return remote_port;
+    }
+
+    public int getStation_id() {
+        return station_id;
+    }
+
+    public String getDns() {
+        return dns;
+    }
+
+    public String getMac() {
+        return mac;
+    }
+
+    public String getSubnet_mask() {
+        return subnet_mask;
+    }
+
+    public String getSys_version() {
+        return sys_version;
+    }
+
+    public String getRemote_ip() {
+        return remote_ip;
+    }
 
 }

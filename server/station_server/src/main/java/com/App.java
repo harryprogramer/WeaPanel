@@ -5,9 +5,10 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 
 public class App {
-    private static ArrayList<Service> services = new ArrayList<>();
+    private static final ArrayList<Service> services = new ArrayList<>();
     private static final Logger logger = Logger.getLogger(App.class);
 
+    public static final String ServerVersion = "1.2";
 
     public static void registerService(Service service){
         services.add(service);

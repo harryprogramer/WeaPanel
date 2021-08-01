@@ -1,11 +1,11 @@
 package com.scom;
 
+import com.scom.protocol.PacketHandler;
 import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ClientHandler {

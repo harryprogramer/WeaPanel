@@ -5,12 +5,13 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 
 public class SocketCore {
     public final ServerSocket sck_server;
     private boolean server_flag = false;
     private final Logger logger = Logger.getLogger(SocketCore.class.getName());
-    private TelemetryStream[] tel_tasks;
+    private ArrayList<Class<? extends TelemetryStream>> tel_tasks;
 
     protected SocketCore(ServerSocket serverSocket){
         this.sck_server = serverSocket;
@@ -39,7 +40,7 @@ public class SocketCore {
         }
     }
 
-    public void registerTelemetryTask(TelemetryStream[] tasks){
+    public void registerTelemetryTasks(ArrayList<Class<? extends TelemetryStream>> tasks){
         this.tel_tasks = tasks;
     }
 

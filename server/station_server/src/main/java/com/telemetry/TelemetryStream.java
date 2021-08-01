@@ -45,7 +45,7 @@ public abstract class TelemetryStream implements TelemetryInterface {
         logger.info("Starting telemetry for [" + client.getUUID() + "]");
         initTelemetryAction();
         status = Status.SAVING;
-        sessionStartAction(client);
+        new Thread(() -> sessionStartAction(client)).start();
     }
 
     public final synchronized void savePacket(TelemetryPacket telemetryPacket){

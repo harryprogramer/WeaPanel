@@ -1,6 +1,6 @@
 package com.http;
 import com.Service;
-import com.scom.SComService;
+import com.scom.Server;
 import com.telemetry.HardwareTelemetryPacket;
 import com.telemetry.TelemetryPacket;
 import org.apache.log4j.Logger;
@@ -28,10 +28,10 @@ public class HttpApi extends Service {
             if (req.requestMethod().equalsIgnoreCase("GET")) {
                 JSONObject response = new JSONObject();
 
-                TelemetryPacket telemetry = SComService.getTelemetry();
-                HardwareTelemetryPacket hardwareTelemetry = SComService.getHardwareTelemetry();
+                TelemetryPacket telemetry = Server.getTelemetry();
+                HardwareTelemetryPacket hardwareTelemetry = Server.getHardwareTelemetry();
                 res.header("Content-Type", "application/json");
-                if (telemetry != null && hardwareTelemetry != null && SComService.getStationConn() != null) {
+                if (telemetry != null && hardwareTelemetry != null && Server.getStationConn() != null) {
                     res.header("message", "ok");
                     response.put("conn", "OK");
                     response.put("time", new JSONObject()
@@ -48,7 +48,7 @@ public class HttpApi extends Service {
                             .put("sound", telemetry.getSoundLevel())
                             .put("MQ135", telemetry.getMQ135_ppm())
                             .put("MQ7", telemetry.getMQ7_ppm())
-                            .put("MQ2", telemetry.getMQ3_ppm())
+                            .put("MQ2", telemetry.getMQ2_ppm())
                             .put("pressure_hPa", telemetry.getPressure_hPa())
                             .put("light", telemetry.getLight_Lux())
                             .put("pressure_pa", telemetry.getPressure_pa()));
@@ -66,7 +66,7 @@ public class HttpApi extends Service {
                     .put("firstBlockVoltage", hardwareTelemetry.firstBlockVoltage())
                     .put("secondBlockVoltage", hardwareTelemetry.secondBlockVoltage()));
                 } else {
-                    if(SComService.getStationConn() != null){
+                    if(Server.getStationConn() != null){
                         res.header("message", "internal error");
                     }else {
                         res.header("message", "no connection");

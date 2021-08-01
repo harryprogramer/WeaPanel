@@ -56,7 +56,7 @@ public interface TelemetryPacket {
         }
 
         @Override
-        public int getMQ3_ppm() {
+        public int getMQ2_ppm() {
             return mq3;
         }
 
@@ -91,7 +91,7 @@ public interface TelemetryPacket {
 
     int getMQ7_ppm();
 
-    int getMQ3_ppm();
+    int getMQ2_ppm();
 
     int getPressure_hPa();
 
